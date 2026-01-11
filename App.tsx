@@ -62,7 +62,22 @@ const App: React.FC = () => {
       audioContextInRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
       audioContextOutRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
 
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Intentar reanudar contextos de audio si están suspendidos (política de autoplay)
+      await Promise.all([
+        audioContextInRef.current.state === 'suspended' ? audioContextInRef.current.resume() : Promise.resolve(),
+        audioContextOutRef.current.state === 'suspended' ? audioContextOutRef.current.resume() : Promise.resolve()
+      ]);
+
+      if (audioContextInRef.current.state === 'suspended') {
+        console.warn("AudioContext suspendido! Se requiere interacción del usuario.");
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          channelCount: 1,
+          sampleRate: 16000
+        }
+      });
 
       const sessionPromise = ai.live.connect({
         model: 'gemini-2.5-flash-native-audio-preview-12-2025',
