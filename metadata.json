@@ -1,0 +1,7 @@
+{
+  "name": "Daganzo Atiende - Asistente Virtual",
+  "description": "Asistente de voz inteligente para el Ayuntamiento de Daganzo de Arriba, Madrid. Resuelve dudas ciudadanas en tiempo real.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
