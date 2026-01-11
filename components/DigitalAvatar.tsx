@@ -13,7 +13,7 @@ const DigitalAvatar: React.FC<DigitalAvatarProps> = ({ status }) => {
   const isError = status === AgentStatus.ERROR;
 
   // Ruta de la imagen cargada por el usuario
-  const avatarUrl = "/Manuel.png";
+  const avatarUrl = `${import.meta.env.BASE_URL}Manuel.png`;
 
   return (
     <div className="relative w-[450px] h-[450px] flex items-center justify-center">
