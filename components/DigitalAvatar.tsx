@@ -104,7 +104,7 @@ const DigitalAvatar: React.FC<DigitalAvatarProps> = ({ status }) => {
           isListening ? 'bg-amber-500 border-amber-400 text-slate-950 animate-pulse' :
             'bg-white/5 border-white/10 text-white/30 backdrop-blur-md'
           }`}>
-          {isSpeaking ? 'TRANSMITIENDO' : isListening ? 'ESCUCHANDO' : isConnecting ? 'SINCRONIZANDO' : 'VIRTUAL ID'}
+          {isSpeaking ? 'TRANSMITIENDO' : isListening ? 'ESCUCHANDO' : isConnecting ? 'SINCRONIZANDO' : isError ? 'ERROR DE CONEXIÓN' : 'VIRTUAL ID'}
         </div>
       </div>
 

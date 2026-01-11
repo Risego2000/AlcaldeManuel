@@ -21,19 +21,43 @@ const App: React.FC = () => {
 
   // Auto-iniciar la llamada al cargar la página
   useEffect(() => {
-    if (!hasStartedRef.current) {
-      hasStartedRef.current = true;
-      startCall();
-    }
-  }, []);
+    const init = async () => {
+      if (!hasStartedRef.current) {
+        console.log("Intentando auto-inicio...");
+        hasStartedRef.current = true;
+        await startCall();
+      }
+    };
+    init();
+
+    // Fallback: Si el navegador bloquea el auto-inicio, permitir iniciar con un clic
+    const handleUserGesture = () => {
+      if (!isLive && status === AgentStatus.IDLE) {
+        console.log("Iniciando por interacción de usuario...");
+        startCall();
+      }
+    };
+    window.addEventListener('click', handleUserGesture);
+    return () => window.removeEventListener('click', handleUserGesture);
+  }, [status, isLive]);
 
 
   const startCall = async () => {
     try {
+      console.log("Iniciando conexión...");
+      if (status === AgentStatus.CONNECTING || status === AgentStatus.LISTENING) return;
+
       setStatus(AgentStatus.CONNECTING);
       setIsLive(true);
 
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      const apiKey = process.env.API_KEY;
+      if (!apiKey) {
+        console.error("API Key no encontrada");
+        throw new Error("API Key missing");
+      }
+      console.log("API Key detectada, inicializando cliente...");
+
+      const ai = new GoogleGenAI({ apiKey });
 
       audioContextInRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
       audioContextOutRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
@@ -51,6 +75,7 @@ const App: React.FC = () => {
         },
         callbacks: {
           onopen: () => {
+            console.log("Conexión establecida!");
             setStatus(AgentStatus.LISTENING);
             const source = audioContextInRef.current!.createMediaStreamSource(stream);
             const scriptProcessor = audioContextInRef.current!.createScriptProcessor(4096, 1, 1);
@@ -65,6 +90,8 @@ const App: React.FC = () => {
             scriptProcessor.connect(audioContextInRef.current!.destination);
           },
           onmessage: async (message: LiveServerMessage) => {
+            // Logs para depuración
+            if (message.serverContent?.turnComplete) console.log("Turno completado");
             const base64Audio = message.serverContent?.modelTurn?.parts?.[0]?.inlineData?.data;
             if (base64Audio && audioContextOutRef.current) {
               setStatus(AgentStatus.SPEAKING);
@@ -90,16 +117,24 @@ const App: React.FC = () => {
               setStatus(AgentStatus.LISTENING);
             }
           },
-          onerror: () => setStatus(AgentStatus.ERROR),
-          onclose: () => handleStop()
+          onerror: (err) => {
+            console.error("Error en sesión Gemini:", err);
+            setStatus(AgentStatus.ERROR);
+          },
+          onclose: () => {
+            console.log("Sesión cerrada");
+            handleStop();
+          }
         }
       });
 
       sessionPromiseRef.current = sessionPromise;
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      console.error("Error fatal en startCall:", err);
+      console.error("Detalles:", err.message);
       setStatus(AgentStatus.ERROR);
       setIsLive(false);
+      hasStartedRef.current = false; // Permitir reintento
     }
   };
 
