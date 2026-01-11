@@ -1,20 +1,35 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Alcalde Digital - Asistente de Voz
 
-# Run and deploy your AI Studio app
+Asistente de voz inteligente para el Ayuntamiento de Daganzo de Arriba, Madrid.
 
-This contains everything you need to run your app locally.
+## 🚀 Deploy
 
-View your app in AI Studio: https://ai.studio/apps/drive/1oE_Pqq1tz7QGPedrB-mc7UACs6WQ9Gca
+- **Netlify**: Configurado con deploy automático
+- **GitHub**: https://github.com/Risego2000/AlcaldeDigital
 
-## Run Locally
+## 🎯 Características
 
-**Prerequisites:**  Node.js
+- ✅ Asistente de voz con auto-inicio
+- ✅ Animaciones realistas de boca al hablar
+- ✅ Avatar de Manuel Jurado Marrufo
+- ✅ Interfaz limpia sin botones
+- ✅ Gemini 2.5 Flash Native Audio
 
+## 📝 Variables de Entorno
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- `GEMINI_API_KEY`: API key de Google Gemini
+
+## 🛠️ Desarrollo
+
+```bash
+npm install
+npm run dev
+```
+
+## 📦 Build
+
+```bash
+npm run build
+```
+
+La carpeta `dist/` contendrá los archivos listos para producción.
