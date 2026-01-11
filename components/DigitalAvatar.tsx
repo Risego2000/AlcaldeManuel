@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { AgentStatus } from '../types';
-import avatarImage from './Manuel.png';
 
 interface DigitalAvatarProps {
   status: AgentStatus;
@@ -14,7 +13,7 @@ const DigitalAvatar: React.FC<DigitalAvatarProps> = ({ status }) => {
   const isError = status === AgentStatus.ERROR;
 
   // Ruta de la imagen cargada por el usuario
-  const avatarUrl = avatarImage;
+  const avatarUrl = "/Manuel.png";
 
   return (
     <div className="relative w-[450px] h-[450px] flex items-center justify-center">
