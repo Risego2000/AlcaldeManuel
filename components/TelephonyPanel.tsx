@@ -34,7 +34,7 @@ const TelephonyPanel: React.FC = () => {
           <div className="relative p-4 bg-indigo-950 rounded-xl font-mono text-[11px] text-indigo-200 overflow-x-auto">
             <div className="flex flex-col gap-2">
               <p className="text-indigo-400">// Ejemplo de flujo en el servidor backend</p>
-              <p>1. <span className="text-white">Twilio</span> recibe llamada -> <span className="text-yellow-400">&lt;Stream url="wss://tu-servidor.com/v1" /&gt;</span></p>
+              <p>1. <span className="text-white">Twilio</span> recibe llamada &rarr; <span className="text-yellow-400">&lt;Stream url="wss://tu-servidor.com/v1" /&gt;</span></p>
               <p>2. <span className="text-white">Tu Servidor</span> abre WebSocket con <span className="text-blue-400">Gemini Live API</span></p>
               <p>3. <span className="text-white">Conversión:</span> Audio Mulaw (Twilio) ↔ Audio PCM (Gemini)</p>
               <p>4. <span className="text-white">Baja Latencia:</span> Gemini responde y el audio fluye directo al ciudadano.</p>
